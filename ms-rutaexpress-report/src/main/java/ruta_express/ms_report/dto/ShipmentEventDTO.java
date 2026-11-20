@@ -1,4 +1,4 @@
-package com.rutaexpress.report.dto;
+package ruta_express.ms_report.dto;
 
 import java.time.Instant;
 

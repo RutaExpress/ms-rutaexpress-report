@@ -1,4 +1,4 @@
-package com.rutaexpress.report.exception;
+package ruta_express.ms_report.exception;
 
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package com.rutaexpress.report.config;
+package ruta_express.ms_report.config;
 
 public final class KafkaTopics {
     public static final String SHIPMENTS_EVENTS = "shipments.events";
