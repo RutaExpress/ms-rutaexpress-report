@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,7 +18,15 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping("/kpis")
-    public Map<String, Long> getKpis(@RequestParam(defaultValue = "last24h") String range) {
-        return reportService.getActiveStatusCounts();
+    public Map<String, Object> getKpis(@RequestParam(defaultValue = "last24h") String range) {
+        return Map.of(
+            "estadosActivos", reportService.getActiveStatusCounts(),
+            "enviosPorHora", reportService.getShipmentsPerHour(range)
+        );
+    }
+
+    @GetMapping("/top-services")
+    public List<Map<String, Object>> getTopServices(@RequestParam(defaultValue = "last7d") String range) {
+        return reportService.getTopServices(range);
     }
 }
