@@ -1,16 +1,27 @@
 # ms-rutaexpress-report
 
-Consumidor de eventos de envíos y servicio de KPIs para RutaExpress.
+Microservicio encargado de consumir eventos de envíos desde Kafka y calcular KPIs analíticos para RutaExpress.
 
-## Estado actual (commit de avance)
-- Estructura en capas creada: controller, service, repository, model, dto, messaging, config, exception.
-- `ShipmentEventListener` ya escucha `shipments.events` (groupId `report`) y delega en `ReportService`.
-- `ReportController` expone los endpoints `/api/v1/report/kpis` y `/top-services` (por ahora devuelven listas vacías).
-- Configuración por variables de entorno lista para Oracle y Kafka.
+## 🚀 Tecnologías
+- Java 21 / Spring Boot
+- Spring Data JPA + Oracle (H2 en local)
+- Spring Kafka
+- Maven
 
-## Puerto
-8086
+## ⚙️ Variables de Entorno
+Revisar el archivo `.env.example` para las variables necesarias.
 
-## Variables principales
-- `KAFKA_BOOTSTRAP_SERVERS`
-- `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`
+## 🔌 Endpoints Principales
+- `GET /api/v1/report/kpis?range=last24h` (Retorna estados activos y envíos por hora)
+- `GET /api/v1/report/top-services?range=last7d` (Retorna los servicios más solicitados)
+- `GET /actuator/health` (Estado del microservicio para Docker)
+
+## 🏗️ Cómo ejecutar en local
+1. Asegurarse de tener Kafka corriendo (o usar el compose de Felipe).
+2. Ejecutar `mvn spring-boot:run`.
+3. Consumir los endpoints vía `http://localhost:8086`.
+
+## 🐳 Docker
+Para construir la imagen:
+```bash
+docker build -t ms-rutaexpress-report .
