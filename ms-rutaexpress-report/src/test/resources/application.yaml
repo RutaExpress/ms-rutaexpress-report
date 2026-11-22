@@ -1,0 +1,14 @@
+# configuración SOLO para los tests: reemplaza a la de src/main/resources
+# base H2 en memoria (no necesita Oracle) y listeners de Kafka apagados (no necesita los brokers)
+spring:
+  datasource:
+    url: jdbc:h2:mem:reportdb
+    username: sa
+    password: ""              # valor de prueba, no es un secreto real
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener:
+      auto-startup: false     # en los tests ningún listener se conecta a Kafka
