@@ -4,21 +4,22 @@ server:
 spring:
   application:
     name: ms-rutaexpress-report
+  # Oracle: usuario REPORT_USER en ORCLPDB1 (lo crea apps/oracle/01-usuarios.sh de rutaexpress-infra)
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:reportdb}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
-    password: ${SPRING_DATASOURCE_PASSWORD:}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@localhost:1521/ORCLPDB1}
+    username: ${SPRING_DATASOURCE_USERNAME:REPORT_USER}
+    # secreto: sin valor por defecto (convención); va en el .env
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    # los 3 brokers de rutaexpress-infra/kafka
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,localhost:9093,localhost:9094}
     consumer:
       group-id: report
+      auto-offset-reset: earliest          # si el group es nuevo, lee desde el primer evento guardado
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "com.rutaexpress.report.dto"
-        spring.json.value.default.type: com.rutaexpress.report.dto.ShipmentEventDTO
+      # shipments publica el JSON como texto, sin headers de tipo: el listener lo convierte
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
